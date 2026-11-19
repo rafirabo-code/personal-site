@@ -38,16 +38,17 @@ const html = `<!doctype html><html lang="en"><head><meta charset="utf-8">
   @page { size: Letter; margin: 0.55in; }
   * { box-sizing: border-box; }
   body { margin: 0; font: 10.25pt/1.38 "Helvetica Neue", Helvetica, Arial, sans-serif; color: #000; }
-  h1 { font-size: 20pt; margin: 0 0 2pt; letter-spacing: -0.2pt; }
-  .contact { margin: 0 0 6pt; padding-bottom: 6pt; border-bottom: 0.6pt solid #000; }
+  h1 { font-size: 20pt; margin: 0 0 7pt; letter-spacing: -0.2pt; }
+  .contact { margin: 0 0 10pt; padding-bottom: 9pt; border-bottom: 0.6pt solid #000; }
   .contact a { color: #000; text-decoration: none; }
-  .pitch { margin: 0 0 8pt; }
-  h2 { font-size: 10.25pt; text-transform: uppercase; letter-spacing: 0.8pt; margin: 10pt 0 3pt; }
-  .row { display: flex; justify-content: space-between; align-items: baseline; margin: 5pt 0 1pt; }
+  .pitch { margin: 0 0 6pt; }
+  h2 { font-size: 10.25pt; text-transform: uppercase; letter-spacing: 0.8pt; margin: 16pt 0 7pt; }
+  .row { display: flex; justify-content: space-between; align-items: baseline; margin: 11pt 0 6pt; }
+  h2 + .row { margin-top: 0; }
   h3 { font-size: 10.25pt; margin: 0; }
-  .yr { white-space: nowrap; }
+  .yr { white-space: nowrap; padding-left: 12pt; }
   ul { margin: 0; padding-left: 13pt; }
-  li { margin: 0 0 1.5pt; }
+  li { margin: 0 0 2.5pt; }
   p { margin: 0; }
   b { font-weight: 600; }
 </style></head><body>
