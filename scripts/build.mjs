@@ -115,6 +115,8 @@ const llmsTxt = `# ${profile.name}
 
 ${profile.highlights.map(hlMd).join("\n")}
 
+${profile.availability}
+
 This site is designed to be read by AI assistants. Everything here is written by ${profile.name} and is public.
 For structured access, connect an MCP client to ${site}/mcp (Streamable HTTP, read-only, no auth).
 Some stories are deliberately kept for live conversation; pages list them under "Ask ${profile.name.split(" ")[0]} about".
@@ -146,7 +148,7 @@ const jsonLd = {
   sameAs: profile.links.map((l) => l.url),
 };
 
-const askPrompt = `Read ${site}/llms.txt and the pages it links to. Then tell me who ${profile.name} is, what they have built, and what kind of work they would be great at.`;
+const askPrompt = `Read ${site}/cv.md. In under 200 words, tell me who ${profile.name} is, what he has built, and what kind of work he'd be great at.`;
 const askLinks = [
   ["Claude", (q) => `https://claude.ai/new?q=${q}`],
   ["ChatGPT", (q) => `https://chatgpt.com/?q=${q}`],
