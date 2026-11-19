@@ -9,9 +9,12 @@ roles:
   - title: Founder
     team: Batta
     line: An AI security architect for CISOs and product security teams. We had 5 enterprise design partners, but the funding round didn't close.
+    # pdf_line: the 1–2 line version for the one-page PDF CV.
+    pdf_line: "agentic security reviews for CISOs; 5 enterprise design partners. The funding round didn't close."
   - title: Founder
     team: Penny
     line: Voice agents that help small businesses close more deals without adding headcount. We had 5 design partners and 2 customers using it in production. We walked away before betting on one big client.
+    pdf_line: "voice agents for small businesses; 5 design partners, 2 customers in production. We walked away before betting on one big client."
 ask_me_about:
   - "Why I left Microsoft, and who I left to build with."
   - "What replacing a security architect with agents looks like in practice."

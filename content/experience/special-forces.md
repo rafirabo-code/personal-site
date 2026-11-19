@@ -9,4 +9,6 @@ tags: [leadership, decision-making]
 roles:
   - title: Combat soldier
     line: Took part in significant operations and led training for the unit's new soldiers.
+    # pdf_line: the short version for the one-page PDF CV.
+    pdf_line: "led training for new soldiers"
 ---

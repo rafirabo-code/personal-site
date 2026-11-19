@@ -9,30 +9,36 @@ roles:
   - title: Senior Product Manager
     team: Copilot Studio
     line: Led the agent evaluation framework.
+    # pdf_line: the one-line version for the one-page PDF CV.
+    pdf_line: "led the agent evaluation framework; shipped connector data controls for thousands of agent builders."
     points:
       - "Builders test their agents and ship with confidence."
       - "Shipped data controls over connectors across Power Platform, for thousands of agent builders."
   - title: Senior Product Manager
     team: Copilot for Sales
     line: Led the 0→1 MVP, launched inside Teams as Viva Sales.
+    pdf_line: "led the 0→1 MVP (Viva Sales); thousands of customers, incl. Fortune 100."
     points:
       - "The product went on to reach thousands of customers, including Fortune 100."
       - "Adopting customers reported seller productivity and revenue gains."
   - title: Product Manager
     team: Dynamics 365 Sales
     line: Shipped the sales accelerator.
+    pdf_line: "shipped the sales accelerator, used by hundreds of global enterprises."
     points:
       - "Used by hundreds of global enterprises."
       - "Sales orgs define, control and monitor their own workflows."
   - title: Associate Product Manager
     team: Azure Monitor
     line: Led the Log Analytics query experience.
+    pdf_line: "led the Log Analytics query experience; 1M+ monthly active users."
     points:
       - "1M+ monthly active users."
       - "Faster, simpler querying of critical cloud data."
   - title: Associate Product Manager
     team: Microsoft Surface
     line: Led zero-force inking on Surface Pen.
+    pdf_line: "led zero-force inking on Surface Pen."
     points:
       - "Shipped across all Surface pens and devices."
       - "Writing that registers from the lightest touch."

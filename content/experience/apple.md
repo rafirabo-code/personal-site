@@ -9,11 +9,14 @@ roles:
   - title: VLSI Engineer
     team: Chip design
     line: Drove SSD and networking silicon across Macs, iPhones and Apple Watches.
+    # pdf_line: the one-line version for the one-page PDF CV.
+    pdf_line: "drove SSD and networking silicon across Macs, iPhones and Apple Watches; 11 chip designs, all on time or early."
     points:
       - "11 chip designs, all delivered on time or early."
   - title: VLSI Engineer
     team: Chip monitoring tool
     line: Built a new hardware-software tool to monitor Apple chips end to end.
+    pdf_line: "built a new hardware-software tool to monitor Apple chips end to end."
 ---
 
 **Chip design.** My main focus was chip design. I drove several products, especially in SSD and

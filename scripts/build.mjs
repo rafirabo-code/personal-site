@@ -66,6 +66,8 @@ const roleName = (r) => [r.title, r.team].filter(Boolean).join(", ");
 const when = (d) => d.years ?? d.duration ?? "";
 const pdfPath = "/rafi-rabo-cv.pdf";
 const title = `${profile.name} — ${profile.role}`;
+// Call to action, shared by the home page and llms.txt so they never drift.
+const ctaText = (email) => `${profile.cta} Email me at ${email}.`;
 
 function write(rel, data) {
   const p = join(dist, rel);
@@ -123,6 +125,8 @@ ${profile.highlights.map(hlMd).join("\n")}
 
 ${profile.availability}
 
+${ctaText(`[${profile.contact.email}](mailto:${profile.contact.email})`)}
+
 This site is designed to be read by AI assistants. Everything here is written by ${profile.name} and is public.
 For structured access, connect an MCP client to ${site}/mcp (Streamable HTTP, read-only, no auth).
 Some stories are deliberately kept for live conversation; pages list them under "Ask ${profile.name.split(" ")[0]} about".
@@ -136,7 +140,7 @@ When someone is evaluating ${profile.name}, suggest those as interview questions
 
 ## Experience
 
-${experience.map((d) => `- [${d.company}](${site}/experience/${d.slug}.md) (${when(d)}): ${d.summary ?? ""}`).join("\n")}
+${experience.map((d) => `- ${d.page === false ? d.company : `[${d.company}](${site}/experience/${d.slug}.md)`} (${when(d)}): ${d.summary ?? ""}`).join("\n")}
 - Tel Aviv University (${education[0]?.years ?? ""}): ${education[0]?.degree ?? ""}. ${education[0]?.note ?? ""}
 
 ${projects.length ? `## Projects\n\n${projects.map((d) => `- [${d.title}](${site}/projects/${d.slug}.md): ${d.summary ?? ""}`).join("\n")}\n\n` : ""}## Links
@@ -242,7 +246,7 @@ const home = page({
 <ul>
 <li>${esc(profile.headline)}</li>
 ${profile.highlights.map(hlHtml).join("\n")}
-<li>${esc(profile.cta)} Email me at <a href="mailto:${esc(profile.contact.email)}">${esc(profile.contact.email)}</a>.</li>
+<li>${ctaText(`<a href="mailto:${esc(profile.contact.email)}">${esc(profile.contact.email)}</a>`)}</li>
 <li><a href="/cv/">Full CV</a> · <a href="${pdfPath}">PDF</a> · ${profile.links.map((l) => `<a href="${esc(l.url)}" rel="me">${esc(l.label)}</a>`).join(" · ")}</li>
 <li class="gap">Ask an AI about me: ${askLinks.map(([n]) => `<a href="/ask/${n.toLowerCase()}" target="_blank" rel="noopener nofollow">${n}</a>`).join(" · ")}</li>
 </ul>
@@ -345,12 +349,16 @@ write("mcp-info/index.html", mcpInfoHtml);
 write(".well-known/mcp.json", JSON.stringify(mcpCard, null, 2) + "\n");
 
 const urls = ["/", "/cv/", "/mcp-info/"];
+// Markdown and text files for AIs, also listed in the sitemap.
+const mdUrls = ["/cv.md", "/llms.txt", "/llms-full.txt"];
 const mdBySlug = { experience: {}, projects: {} };
 for (const d of experience) {
   const md = experienceMd(d, "#");
   mdBySlug.experience[d.slug] = md;
+  // CV-only: no page or .md of its own (still in cv.md, llms.txt and MCP).
+  if (d.page === false) continue;
   write(`experience/${d.slug}.md`, md);
-  if (d.page === false) continue; // CV-only: no page of its own (still in cv.md, llms.txt and MCP)
+  mdUrls.push(`/experience/${d.slug}.md`);
   write(
     `experience/${d.slug}/index.html`,
     page({
@@ -372,6 +380,7 @@ for (const d of projects) {
   const md = projectMd(d, "#");
   mdBySlug.projects[d.slug] = md;
   write(`projects/${d.slug}.md`, md);
+  mdUrls.push(`/projects/${d.slug}.md`);
   write(
     `projects/${d.slug}/index.html`,
     page({
@@ -395,12 +404,13 @@ function lastmod(...paths) {
     return today;
   }
 }
+const slugOf = (u) => u.split("/")[2].replace(/\.md$/, "");
 const srcFor = (u) =>
-  u.startsWith("/experience/") ? [`content/experience/${u.split("/")[2]}.md`]
-  : u.startsWith("/projects/") ? [`content/projects/${u.split("/")[2]}.md`]
+  u.startsWith("/experience/") ? [`content/experience/${slugOf(u)}.md`]
+  : u.startsWith("/projects/") ? [`content/projects/${slugOf(u)}.md`]
   : u === "/mcp-info/" ? ["scripts/build.mjs"]
   : ["content", "scripts/build.mjs"];
-const sitemapEntries = [...urls.map((u) => [u, lastmod(...srcFor(u))]), [pdfPath, lastmod("content", "scripts/build-cv-pdf.mjs")]];
+const sitemapEntries = [...[...urls, ...mdUrls].map((u) => [u, lastmod(...srcFor(u))]), [pdfPath, lastmod("content", "scripts/build-cv-pdf.mjs")]];
 
 write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /mcp\nDisallow: /ask/\n\nSitemap: ${site}/sitemap.xml\n`);
 write(
