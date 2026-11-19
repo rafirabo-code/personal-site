@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-85 -26 820 820">
+  <title>RR</title>
+  <style>
+    .ink { fill: #111; }
+    @media (prefers-color-scheme: dark) { .ink { fill: #eee; } }
+  </style>
+  <defs>
+    <!-- One R: stem, bowl with counter, and a leg that sweeps out like the Arabic letter ر. -->
+    <path id="r" fill-rule="evenodd" d="M0 0H245C330 0 380 60 380 137C380 215 340 265 290 275C320 350 380 395 445 395V467C360 485 230 460 160 295H115V454H0Z M115 85H217C245 85 262 100 262 130V160C262 190 245 205 217 205H115Z"/>
+    <path id="r-outline" d="M0 0H245C330 0 380 60 380 137C380 215 340 265 290 275C320 350 380 395 445 395V467C360 485 230 460 160 295H115V454H0Z"/>
+    <!-- The front R (solid outline, no hole) cuts a gap out of the back R. -->
+    <mask id="gap" maskUnits="userSpaceOnUse" x="-85" y="-26" width="820" height="820">
+      <rect x="-85" y="-26" width="820" height="820" fill="#fff"/>
+      <use href="#r-outline" transform="translate(0 301)" fill="#000" stroke="#000" stroke-width="56" stroke-linejoin="round"/>
+    </mask>
+  </defs>
+  <g class="ink">
+    <g mask="url(#gap)"><use href="#r" transform="translate(205 0)"/></g>
+    <use href="#r" transform="translate(0 301)"/>
+  </g>
+</svg>

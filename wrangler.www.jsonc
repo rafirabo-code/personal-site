@@ -1,0 +1,9 @@
+// www.rafirabo.com → rafirabo.com (301). Deploy with: npm run deploy:www
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "personal-site-www",
+  "main": "worker/www-redirect.ts",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": false,
+  "routes": [{ "pattern": "www.rafirabo.com", "custom_domain": true }]
+}

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+worker/generated/
+.wrangler/
+.dev.vars
+.env*
+.DS_Store
+.banned-words
+CLAUDE.local.md
+VOICE.local.md
+.claude/

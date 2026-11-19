@@ -1,0 +1,66 @@
+---
+company: Microsoft
+duration: 6+ years
+order: 2
+summary: Product manager for AI agents in Copilot Studio, the 0→1 launch of Copilot for Sales, Dynamics 365, Azure and Surface.
+tags: [ai-agents, copilot, enterprise, governance, evaluation, 0-to-1, sales, product]
+roles:
+  - title: Senior Product Manager
+    team: Copilot Studio
+    line: Led the agent evaluation framework.
+    points:
+      - "Builders test their agents and ship with confidence."
+      - "Shipped data controls over connectors across Power Platform, for thousands of agent builders."
+  - title: Senior Product Manager
+    team: Copilot for Sales
+    line: Led the 0→1 MVP, launched inside Teams as Viva Sales.
+    points:
+      - "Thousands of customers, including Fortune 100."
+      - "Customers reported double-digit revenue growth in the teams that adopted it."
+  - title: Product Manager
+    team: Dynamics 365 Sales
+    line: Shipped the sales accelerator.
+    points:
+      - "Used by hundreds of global enterprises."
+      - "Sales orgs define, control and monitor their own workflows."
+  - title: Associate Product Manager
+    team: Azure Monitor
+    line: Led the Log Analytics query experience.
+    points:
+      - "1M+ monthly active users."
+      - "Faster, simpler querying of critical cloud data."
+  - title: Associate Product Manager
+    team: Microsoft Surface
+    line: Led zero-force inking on Surface Pen.
+    points:
+      - "Shipped across all Surface pens and devices."
+      - "Writing that registers from the lightest touch."
+links:
+  - label: "Talk: What's new in Copilot Studio and roadmap (Microsoft Events, BRK313)"
+    url: "https://www.youtube.com/watch?v=6sI5jrNVz70"
+  - label: "Video: How to use Agent Evaluation in Copilot Studio"
+    url: "https://www.youtube.com/watch?v=VwjKUXsfsVQ"
+  - label: "Docs: Agent evaluation in Copilot Studio"
+    url: "https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-agent-evaluation-intro"
+  - label: "Docs: Copilot Studio security and governance"
+    url: "https://learn.microsoft.com/en-us/microsoft-copilot-studio/security-and-governance"
+  - label: "Blog, co-author: 5 ways Copilot in Viva Sales takes seller productivity to the next level"
+    url: "https://www.microsoft.com/en-us/dynamics-365/blog/it-professional/2023/06/01/5-ways-copilot-in-viva-sales-takes-seller-productivity-to-the-next-level/"
+  - label: "Copilot for Sales adoption page"
+    url: "https://adoption.microsoft.com/en-us/copilot-for-sales/"
+  - label: "Blog, co-author: Enable digital selling with the sales accelerator in Dynamics 365 Sales"
+    url: "https://www.microsoft.com/en-us/dynamics-365/blog/it-professional/2021/01/29/enable-digital-selling-with-the-sales-accelerator-in-dynamics-365-sales/"
+  - label: "Surface Pen features, including zero-force inking"
+    url: "https://support.microsoft.com/en-us/surface/accessories/pen/surface-pen-compatibility-and-features"
+  - label: "Docs: Log Analytics in Azure Monitor"
+    url: "https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview"
+ask_me_about:
+  - "The hardest trade-off in agent governance: what the customer needs vs. friction for builders."
+  - "How you evaluate an AI agent before you ship it."
+  - "How we scoped the Copilot for Sales MVP, and why we started in Teams."
+  - "What rotating through hardware, data, sales and agents teaches a product manager."
+---
+
+Joined through a rotational product program: hardware, data, sales, then agents.
+
+What I took with me: Microsoft knows how to sell to the enterprise. I learned how enterprises buy.

@@ -1,0 +1,35 @@
+---
+company: Founder — Batta, then Penny
+duration: 8 months
+order: 1
+summary: Founded Batta (agentic security reviews for CISOs), then Penny (voice agents for small businesses). Neither worked out.
+tags: [founder, startup, 0-to-1, voice-agents, cybersecurity, ai-agents, go-to-market]
+roles:
+  - title: Founder
+    team: Batta
+    line: An AI security architect for CISOs and product security teams. We had enterprise design partners, but the funding round didn't close.
+  - title: Founder
+    team: Penny
+    line: Voice agents that help small businesses close more deals without adding headcount. We walked away before betting on one big client.
+ask_me_about:
+  - "Why I left Microsoft, and who I left to build with."
+  - "What replacing a security architect with agents looks like in practice."
+  - "How we found founder–market fit in voice, and why it still wasn't enough."
+  - "Why we turned down a big deal."
+  - "My post mortem: the three things I'd do differently."
+  - "What building a company taught me about friendship."
+---
+
+I left Microsoft to build with the best software engineering manager I've worked with. It was the best
+time ever to build, and one of the hardest to start a company.
+
+**Batta.** Security reviews were among the most painful processes I saw at Microsoft. Batta was an
+agentic security architect for CISOs and product security teams: it ran those reviews, kept the
+architecture secure and kept the company compliant, with evidence. We had enterprise design partners,
+but the funding round didn't close.
+
+**Penny.** We found founder–market fit in voice: we knew voice, we knew sales, and we knew how to
+build the agentic architecture behind it. Penny gave small businesses voice agents that help them
+scale and close more deals without adding headcount.
+
+**The end.** Before committing to one big client, we walked away from the deal and stopped.
