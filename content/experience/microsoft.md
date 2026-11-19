@@ -1,6 +1,7 @@
 ---
 company: Microsoft
 duration: 6+ years
+years: "2019–2026"
 order: 2
 summary: Product manager for AI agents in Copilot Studio, the 0→1 launch of Copilot for Sales, Dynamics 365, Azure and Surface.
 tags: [ai-agents, copilot, enterprise, governance, evaluation, 0-to-1, sales, product]
@@ -15,8 +16,8 @@ roles:
     team: Copilot for Sales
     line: Led the 0→1 MVP, launched inside Teams as Viva Sales.
     points:
-      - "Thousands of customers, including Fortune 100."
-      - "Customers reported double-digit revenue growth in the teams that adopted it."
+      - "The product went on to reach thousands of customers, including Fortune 100."
+      - "Adopting customers reported seller productivity and revenue gains."
   - title: Product Manager
     team: Dynamics 365 Sales
     line: Shipped the sales accelerator.

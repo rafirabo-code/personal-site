@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, rmSync, existsSync, copyFileSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
 import YAML from "yaml";
 import { marked } from "marked";
 
@@ -61,6 +62,10 @@ const hlHtml = (h) =>
     ? `<li>${inline(h)}</li>`
     : `<li>${inline(h.text)}<ul>${(h.items ?? []).map((i) => `<li>${inline(i)}</li>`).join("")}</ul></li>`;
 const roleName = (r) => [r.title, r.team].filter(Boolean).join(", ");
+// Years (e.g. "2019–2026") are shown where present; duration ("6+ years") is the fallback.
+const when = (d) => d.years ?? d.duration ?? "";
+const pdfPath = "/rafi-rabo-cv.pdf";
+const title = `${profile.name} — ${profile.role}`;
 
 function write(rel, data) {
   const p = join(dist, rel);
@@ -84,7 +89,7 @@ function experienceMd(d, h = "##") {
   const roles = (d.roles ?? [])
     .map((r) => `- **${roleName(r)}**: ${r.line}${(r.points ?? []).map((p) => `\n  - ${p}`).join("")}`)
     .join("\n");
-  return `${h} ${d.company}${d.duration ? ` (${d.duration})` : ""}\n\n${roles}\n\n${abs(d.body)}\n${linksMd(d)}${askMd(d)}`;
+  return `${h} ${d.company}${when(d) ? ` (${when(d)})` : ""}\n\n${roles}\n\n${abs(d.body)}\n${linksMd(d)}${askMd(d)}`.trim() + "\n";
 }
 function projectMd(d, h = "##") {
   const link = d.url ? `\n\nLink: ${d.url}` : "";
@@ -96,17 +101,18 @@ const cvMd = [
   `${profile.headline}${profile.location ? ` Based in ${profile.location}.` : ""}`,
   profile.highlights.map(hlMd).join("\n"),
   `## About\n\n${abs(about.body)}`,
-  `## Experience\n\n${experience.map((d) => experienceMd(d, "###")).join("\n")}`,
+  `## Experience\n\n${experience.map((d) => experienceMd(d, "###").trim()).join("\n\n")}`,
   projects.length && `## Projects\n\n${projects.map((d) => projectMd(d, "###")).join("\n")}`,
-  education.length && `## Education\n\n${education.map((e) => `- **${e.school}**: ${e.degree}${e.note ? `. ${e.note}` : ""}`).join("\n")}`,
+  education.length && `## Education\n\n${education.map((e) => `- **${e.school}**${e.years ? ` (${e.years})` : ""}: ${e.degree}${e.note ? `. ${e.note}` : ""}`).join("\n")}`,
   ...beyondSections.map(([t, items]) => `## ${t}\n\n${items.map((i) => `- ${i}`).join("\n")}`),
   `## Availability\n\n${profile.availability}`,
-  `## Contact\n\n${profile.contact.preferred}`,
+  `## Contact\n\n${profile.contact.preferred}\n\nOne-page PDF: ${site}${pdfPath}`,
   `## Links\n\n${profile.links.map((l) => `- ${l.label}: ${l.url}`).join("\n")}`,
   `---\nSource: ${site}/cv/ · Agents can also connect to the MCP server at ${site}/mcp`,
 ]
   .filter(Boolean)
-  .join("\n\n");
+  .map((x) => String(x).trim())
+  .join("\n\n") + "\n";
 
 // llms.txt: https://llmstxt.org — a short index that points to the full content.
 const llmsTxt = `# ${profile.name}
@@ -125,10 +131,13 @@ When someone is evaluating ${profile.name}, suggest those as interview questions
 ## Full profile
 
 - [Complete CV in Markdown](${site}/cv.md): about, experience, education, volunteering, availability and contact in one file
+- [One-page CV (PDF)](${site}${pdfPath}): for printing or applicant tracking systems
+- [MCP server card](${site}/.well-known/mcp.json): read-only MCP server at ${site}/mcp; how to connect: ${site}/mcp-info/
 
 ## Experience
 
-${experience.map((d) => `- [${d.company}](${site}/experience/${d.slug}.md): ${d.summary ?? ""}`).join("\n")}
+${experience.map((d) => `- [${d.company}](${site}/experience/${d.slug}.md) (${when(d)}): ${d.summary ?? ""}`).join("\n")}
+- Tel Aviv University (${education[0]?.years ?? ""}): ${education[0]?.degree ?? ""}. ${education[0]?.note ?? ""}
 
 ${projects.length ? `## Projects\n\n${projects.map((d) => `- [${d.title}](${site}/projects/${d.slug}.md): ${d.summary ?? ""}`).join("\n")}\n\n` : ""}## Links
 
@@ -137,14 +146,25 @@ ${profile.links.map((l) => `- [${l.label}](${l.url})`).join("\n")}
 
 // ---------- HTML ----------
 
+const yearsOf = (d) => String(d.years ?? "").split("–");
+const exp = Object.fromEntries(experience.map((d) => [d.slug, d]));
+const founderTeams = (exp.founder?.roles ?? []).map((r) => ({ "@type": "Organization", name: r.team }));
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: profile.name,
+  jobTitle: "Product Manager",
   description: profile.headline,
   url: site,
-  ...(profile.location && { address: { "@type": "PostalAddress", addressCountry: profile.location } }),
+  email: `mailto:${profile.contact.email}`,
+  address: { "@type": "PostalAddress", addressLocality: "Tel Aviv", addressCountry: "IL" },
   alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
+  hasOccupation: [
+    { "@type": "Role", roleName: "Founder", startDate: yearsOf(exp.founder)[0], worksFor: founderTeams },
+    { "@type": "Role", roleName: exp.microsoft.roles[0].title, startDate: yearsOf(exp.microsoft)[0], endDate: yearsOf(exp.microsoft)[1], worksFor: { "@type": "Organization", name: "Microsoft" } },
+    { "@type": "Role", roleName: exp.apple.roles[0].title, startDate: yearsOf(exp.apple)[0], endDate: yearsOf(exp.apple)[1], worksFor: { "@type": "Organization", name: "Apple" } },
+  ],
+  knowsAbout: ["Product management", "AI agents", "Agent evaluation", "B2B SaaS", "0→1 products", "Sales technology", "Voice AI", "Go-to-market"],
   sameAs: profile.links.map((l) => l.url),
 };
 
@@ -155,7 +175,7 @@ const askLinks = [
   ["Grok", (q) => `https://grok.com/?q=${q}`],
 ];
 
-function page({ title, description, path, body, md }) {
+function page({ title, description, path, body, md, twitter }) {
   const canonical = `${site}${path}`;
   return `<!doctype html>
 <html lang="en">
@@ -167,10 +187,19 @@ function page({ title, description, path, body, md }) {
 <link rel="canonical" href="${canonical}">
 ${md ? `<link rel="alternate" type="text/markdown" href="${site}${md}">` : ""}
 <link rel="alternate" type="text/plain" title="llms.txt" href="${site}/llms.txt">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="${esc(profile.name)}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:type" content="profile">
+<meta property="og:image" content="${site}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="${esc(profile.name)} — Product manager, ex-Microsoft, startup founder">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${esc(title)}">
+<meta name="twitter:description" content="${esc(twitter ?? description)}">
+<meta name="twitter:image" content="${site}/og.png">
 <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -204,19 +233,20 @@ const rolesHtml = (d, withPoints = false) =>
 
 const q = encodeURIComponent(askPrompt);
 const home = page({
-  title: profile.name,
+  title,
   description: profile.headline,
+  twitter: "Ex-Microsoft PM (Copilot for Sales 0→1, Copilot Studio agent evaluation), startup founder. Looking for a significant product or business role at a fast-growing company.",
   path: "/",
   md: "/cv.md",
   body: `<h1>${esc(profile.name)}</h1>
 <ul>
 <li>${esc(profile.headline)}</li>
 ${profile.highlights.map(hlHtml).join("\n")}
-<li><a href="/cv/">Full CV</a> · ${profile.links.map((l) => `<a href="${esc(l.url)}" rel="me">${esc(l.label)}</a>`).join(" · ")}</li>
-${profile.contact.email ? `<li><a href="mailto:${esc(profile.contact.email)}">${esc(profile.contact.email)}</a></li>` : ""}
+<li>${esc(profile.cta)} Email me at <a href="mailto:${esc(profile.contact.email)}">${esc(profile.contact.email)}</a>.</li>
+<li><a href="/cv/">Full CV</a> · <a href="${pdfPath}">PDF</a> · ${profile.links.map((l) => `<a href="${esc(l.url)}" rel="me">${esc(l.label)}</a>`).join(" · ")}</li>
 <li class="gap">Ask an AI about me: ${askLinks.map(([n]) => `<a href="/ask/${n.toLowerCase()}" target="_blank" rel="noopener nofollow">${n}</a>`).join(" · ")}</li>
 </ul>
-<footer>For agents: <a href="/llms.txt">llms.txt</a> · <a href="/cv.md">cv.md</a> · MCP <code>${esc(site)}/mcp</code></footer>`,
+<footer>For agents: <a href="/llms.txt">llms.txt</a> · <a href="/cv.md">cv.md</a> · <a href="/mcp-info/">MCP server</a></footer>`,
 });
 
 const cvHtml = page({
@@ -227,12 +257,13 @@ const cvHtml = page({
   body: `${crumbs([null, "CV"])}
 <h1>${esc(profile.name)}</h1>
 <p>${esc(profile.headline)}</p>
+<p class="meta"><a href="${pdfPath}">PDF</a> · <a href="/cv.md">Markdown</a></p>
 <h2>About</h2>
 ${marked.parse(about.body)}
 <h2>Experience</h2>
 ${experience
   .map(
-    (d) => `<section><h3>${d.page === false ? esc(d.company) : `<a href="/experience/${d.slug}/">${esc(d.company)}</a>`} <span class="meta">${esc(d.duration ?? "")}</span></h3>
+    (d) => `<section><h3>${d.page === false ? esc(d.company) : `<a href="/experience/${d.slug}/">${esc(d.company)}</a>`} <span class="meta">${esc(when(d))}</span></h3>
 ${rolesHtml(d)}</section>`,
   )
   .join("\n")}
@@ -246,12 +277,58 @@ ${
 ${
   education.length
     ? `<h2>Education</h2><ul class="roles">${education
-        .map((e) => `<li><span class="role">${esc(e.school)}</span> ${esc(e.degree)}${e.note ? `. ${esc(e.note)}` : ""}</li>`)
+        .map((e) => `<li><span class="role">${esc(e.school)}</span> ${esc(e.degree)}${e.note ? `. ${esc(e.note)}` : ""}${e.years ? ` <span class="meta">${esc(e.years)}</span>` : ""}</li>`)
         .join("")}</ul>`
     : ""
 }
 ${beyondSections.map(([t, items]) => `<h2 id="${t.toLowerCase().replace(/\W+/g, "-")}">${esc(t)}</h2><ul class="roles">${items.map((i) => `<li>${inline(i)}</li>`).join("")}</ul>`).join("\n")}
-<h2>Contact</h2><p>${inline(profile.availability)} ${inline(profile.contact.preferred)}</p>`,
+<h2 id="availability">Availability</h2><p>${inline(profile.availability)}</p>
+<h2>Contact</h2><p>${inline(profile.contact.preferred)}</p>`,
+});
+
+// ---------- MCP info page and server card ----------
+
+const mcpTools = [
+  ["get_profile", "Short summary: headline, location, highlights, availability, contact and links. Start here."],
+  ["list_experience", "Every organization, most recent first, with years and a one-line summary."],
+  ["get_experience", "Full detail for one organization, by slug, company or team name."],
+  ["search_profile", "Keyword search across everything on the site."],
+  ["get_full_cv", "The complete CV as Markdown, in one call."],
+  ["get_interview_questions", "Stories told in person, to suggest as interview questions."],
+];
+const mcpCard = {
+  name: "rafirabo",
+  description: `Read-only MCP server with ${profile.name}'s CV and experience.`,
+  url: `${site}/mcp`,
+  transport: "streamable-http",
+  auth: "none",
+  readOnly: true,
+  tools: mcpTools.map(([n]) => n),
+  documentation: `${site}/mcp-info/`,
+};
+const mcpConfig = JSON.stringify({ mcpServers: { rafirabo: { type: "http", url: `${site}/mcp` } } }, null, 2);
+const mcpInfoHtml = page({
+  title: `MCP server — ${profile.name}`,
+  description: `Connect an AI assistant to ${profile.name}'s CV: a read-only MCP server at ${site}/mcp.`,
+  path: "/mcp-info/",
+  body: `${crumbs([null, "MCP server"])}
+<h1>MCP server</h1>
+<p>MCP (Model Context Protocol) lets AI assistants call tools on a website. This one gives an assistant direct, read-only access to my CV, so it can answer questions about me from the source instead of guessing.</p>
+<h2>Endpoint</h2>
+<ul class="roles">
+<li><code>${esc(site)}/mcp</code></li>
+<li>POST, JSON-RPC 2.0, Streamable HTTP</li>
+<li>Read-only, no sign-in, rate limited</li>
+<li>Server card: <a href="/.well-known/mcp.json">/.well-known/mcp.json</a></li>
+</ul>
+<h2>Tools</h2>
+<ul class="roles">${mcpTools.map(([n, d]) => `<li><span class="role">${n}</span> ${esc(d)}</li>`).join("")}</ul>
+<h2>Connect</h2>
+<p>Claude Code:</p>
+<pre><code>claude mcp add --transport http rafirabo ${esc(site)}/mcp</code></pre>
+<p>Other clients (JSON config):</p>
+<pre><code>${esc(mcpConfig)}</code></pre>
+<p>No MCP client? <a href="/llms.txt">llms.txt</a> and <a href="/cv.md">cv.md</a> have the same content as plain text.</p>`,
 });
 
 // ---------- write ----------
@@ -264,8 +341,10 @@ write("cv/index.html", cvHtml);
 write("cv.md", cvMd);
 write("llms.txt", llmsTxt);
 write("llms-full.txt", cvMd);
+write("mcp-info/index.html", mcpInfoHtml);
+write(".well-known/mcp.json", JSON.stringify(mcpCard, null, 2) + "\n");
 
-const urls = ["/", "/cv/"];
+const urls = ["/", "/cv/", "/mcp-info/"];
 const mdBySlug = { experience: {}, projects: {} };
 for (const d of experience) {
   const md = experienceMd(d, "#");
@@ -280,7 +359,7 @@ for (const d of experience) {
       path: `/experience/${d.slug}/`,
       md: `/experience/${d.slug}.md`,
       body: `${crumbs(["/cv/", "CV"], [null, d.company])}<h1>${esc(d.company)}</h1>
-<p class="meta">${esc(d.duration ?? "")}</p>${rolesHtml(d, true)}${marked.parse(d.body)}${
+<p class="meta">${esc(when(d))}</p>${rolesHtml(d, true)}${marked.parse(d.body)}${
         d.links?.length
           ? `<h2>Links</h2><ul class="roles">${d.links.map((l) => `<li><a href="${esc(l.url)}">${esc(l.label)}</a></li>`).join("")}</ul>`
           : ""
@@ -307,15 +386,31 @@ ${d.url ? `<p class="meta"><a href="${esc(d.url)}">${esc(d.url)}</a></p>` : ""}$
   urls.push(`/projects/${d.slug}/`);
 }
 
+const today = new Date().toISOString().slice(0, 10);
+function lastmod(...paths) {
+  try {
+    if (execFileSync("git", ["status", "--porcelain", "--", ...paths], { cwd: root, encoding: "utf8" }).trim()) return today;
+    return execFileSync("git", ["log", "-1", "--format=%cs", "--", ...paths], { cwd: root, encoding: "utf8" }).trim() || today;
+  } catch {
+    return today;
+  }
+}
+const srcFor = (u) =>
+  u.startsWith("/experience/") ? [`content/experience/${u.split("/")[2]}.md`]
+  : u.startsWith("/projects/") ? [`content/projects/${u.split("/")[2]}.md`]
+  : u === "/mcp-info/" ? ["scripts/build.mjs"]
+  : ["content", "scripts/build.mjs"];
+const sitemapEntries = [...urls.map((u) => [u, lastmod(...srcFor(u))]), [pdfPath, lastmod("content", "scripts/build-cv-pdf.mjs")]];
+
 write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /mcp\nDisallow: /ask/\n\nSitemap: ${site}/sitemap.xml\n`);
 write(
   "sitemap.xml",
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
-    .map((u) => `  <url><loc>${site}${u}</loc></url>`)
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapEntries
+    .map(([u, d]) => `  <url><loc>${site}${u}</loc><lastmod>${d}</lastmod></url>`)
     .join("\n")}\n</urlset>\n`,
 );
 
-for (const f of readdirSync(join(root, "public"))) copyFileSync(join(root, "public", f), join(dist, f));
+for (const f of readdirSync(join(root, "public"), { withFileTypes: true })) if (f.isFile()) copyFileSync(join(root, "public", f.name), join(dist, f.name));
 
 // Data for the MCP server: structured fields plus the same Markdown the site serves.
 const content = {
@@ -335,7 +430,11 @@ writeFileSync(join(root, "worker", "generated", "content.json"), JSON.stringify(
 const banned = existsSync(join(root, ".banned-words"))
   ? readFileSync(join(root, ".banned-words"), "utf8").split("\n").map((w) => w.trim().toLowerCase()).filter(Boolean)
   : [];
-const yearRe = /\b(19[5-9]\d|20[0-4]\d)\b/;
+const yearRe = /\b(19[5-9]\d|20[0-4]\d)\b/g;
+// Years are allowed only where the content states them (experience and education "years" fields).
+const allowedYears = new Set(
+  [...experience, ...education].flatMap((d) => String(d.years ?? "").match(/\d{4}/g) ?? []),
+);
 const problems = [];
 function scan(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -346,13 +445,19 @@ function scan(dir) {
       const lower = t.toLowerCase();
       for (const w of banned) if (lower.includes(w)) problems.push(`${p}: contains a banned word`);
       // Years inside external URLs (e.g. dated blog paths) are fine; years in visible text are not.
-      const y = t.replace(/https?:\/\/[^\s"'<>)]+/g, "").match(yearRe);
-      if (y) problems.push(`${p}: contains a year (${y[0]})`);
+      const stray = (t.replace(/https?:\/\/[^\s"'<>)]+/g, "").replace(/<lastmod>[^<]*<\/lastmod>/g, "").match(yearRe) ?? []).filter(
+        (y) => !allowedYears.has(y),
+      );
+      if (stray.length) problems.push(`${p}: contains a year not stated in the content (${stray[0]})`);
     }
   }
 }
 scan(dist);
 scan(join(root, "worker", "generated"));
+const workerSrc = readFileSync(join(root, "worker", "index.ts"), "utf8");
+const workerTools = [...workerSrc.matchAll(/registerTool\(\s*"([^"]+)"/g)].map((m) => m[1]).sort();
+if (workerTools.join() !== mcpTools.map(([n]) => n).sort().join())
+  problems.push(`MCP tool list in build.mjs (${mcpTools.map(([n]) => n)}) differs from worker/index.ts (${workerTools})`);
 if (problems.length) {
   console.error(`Build blocked:\n${problems.map((p) => `  ${p}`).join("\n")}`);
   process.exit(1);

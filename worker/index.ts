@@ -64,6 +64,7 @@ function buildServer() {
         education: profile.education,
         beyond_work: profile.beyond_work,
         website: site,
+        cv_pdf: `${site}/rafi-rabo-cv.pdf`,
         about: about.body,
       }),
   );
@@ -72,13 +73,13 @@ function buildServer() {
     "list_experience",
     {
       title: "Work experience",
-      description: `Every organization ${profile.name} has worked at, most recent first, with duration and a one-line summary of each role. Use get_experience for full detail.`,
+      description: `Every organization ${profile.name} has worked at, most recent first, with years and a one-line summary of each role. Use get_experience for full detail.`,
       annotations: ro,
     },
     async () =>
       json(
-        experience.map(({ slug, company, duration, summary, roles, tags, links, ask_me_about }: Doc) => ({
-          slug, company, duration, summary, roles, tags, public_links: links, ask_me_about,
+        experience.map(({ slug, company, years, duration, summary, roles, tags, links, ask_me_about }: Doc) => ({
+          slug, company, years, duration, summary, roles, tags, public_links: links, ask_me_about,
         })),
       ),
   );

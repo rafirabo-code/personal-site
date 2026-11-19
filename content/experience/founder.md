@@ -1,16 +1,17 @@
 ---
 company: Founder — Batta, then Penny
 duration: 8 months
+years: "2026"
 order: 1
-summary: Founded Batta (agentic security reviews for CISOs), then Penny (voice agents for small businesses). Neither worked out.
+summary: Founded Batta (agentic security reviews for CISOs, 5 enterprise design partners), then Penny (voice agents for small businesses, 5 design partners, 2 customers in production). We stopped both.
 tags: [founder, startup, 0-to-1, voice-agents, cybersecurity, ai-agents, go-to-market]
 roles:
   - title: Founder
     team: Batta
-    line: An AI security architect for CISOs and product security teams. We had enterprise design partners, but the funding round didn't close.
+    line: An AI security architect for CISOs and product security teams. We had 5 enterprise design partners, but the funding round didn't close.
   - title: Founder
     team: Penny
-    line: Voice agents that help small businesses close more deals without adding headcount. We walked away before betting on one big client.
+    line: Voice agents that help small businesses close more deals without adding headcount. We had 5 design partners and 2 customers using it in production. We walked away before betting on one big client.
 ask_me_about:
   - "Why I left Microsoft, and who I left to build with."
   - "What replacing a security architect with agents looks like in practice."
@@ -25,11 +26,12 @@ time ever to build, and one of the hardest to start a company.
 
 **Batta.** Security reviews were among the most painful processes I saw at Microsoft. Batta was an
 agentic security architect for CISOs and product security teams: it ran those reviews, kept the
-architecture secure and kept the company compliant, with evidence. We had enterprise design partners,
-but the funding round didn't close.
+architecture secure and kept the company compliant, with evidence. We had 5 enterprise design
+partners, but the funding round didn't close.
 
 **Penny.** We found founder–market fit in voice: we knew voice, we knew sales, and we knew how to
 build the agentic architecture behind it. Penny gave small businesses voice agents that help them
-scale and close more deals without adding headcount.
+scale and close more deals without adding headcount. We had 5 design partners and 2 customers using
+it in production.
 
 **The end.** Before committing to one big client, we walked away from the deal and stopped.

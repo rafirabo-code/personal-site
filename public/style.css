@@ -2,7 +2,7 @@
   --bg: #ffffff;
   --fg: #333333;
   --strong: #111111;
-  --muted: #777777;
+  --muted: #6b6b6b;
   --rule: #b1b1b1;
   --rule-hover: #555555;
   --hairline: #eeeeee;
@@ -53,3 +53,4 @@ code { font: inherit; }
 
 /* Extra space before the "Ask an AI about me" bullet. */
 li.gap { margin-top: 1.6em; }
+pre { margin: 0 0 12px; padding: 8px 10px; border: 1px solid var(--hairline); overflow-x: auto; white-space: pre; }

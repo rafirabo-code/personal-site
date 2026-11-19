@@ -1,6 +1,7 @@
 ---
 company: Israel Defense Forces — special forces
 duration: 5 years
+years: "2006–2011"
 order: 4
 page: false
 summary: Served in a special forces unit.

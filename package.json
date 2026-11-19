@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "Personal site for humans, search engines and AI agents (llms.txt, MCP, WebMCP).",
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build.mjs && node scripts/build-cv-pdf.mjs",
     "dev": "npm run build && wrangler dev",
     "typecheck": "npm run build && tsc",
     "deploy": "npm run build && wrangler deploy",
     "deploy:www": "wrangler deploy -c wrangler.www.jsonc",
     "indexnow": "node scripts/indexnow.mjs",
+    "og": "node scripts/build-og.mjs",
     "clicks": "node scripts/clicks.mjs"
   },
   "license": "MIT",

@@ -1,6 +1,7 @@
 ---
 company: Apple
 duration: 5 years
+years: "2014–2019"
 order: 3
 summary: VLSI engineer. Drove chip design for SSD and networking across Apple devices, then built a hardware-software tool to monitor Apple chips.
 tags: [hardware, silicon, vlsi, ssd, networking, engineering, tools]
@@ -8,6 +9,8 @@ roles:
   - title: VLSI Engineer
     team: Chip design
     line: Drove SSD and networking silicon across Macs, iPhones and Apple Watches.
+    points:
+      - "11 chip designs, all delivered on time or early."
   - title: VLSI Engineer
     team: Chip monitoring tool
     line: Built a new hardware-software tool to monitor Apple chips end to end.

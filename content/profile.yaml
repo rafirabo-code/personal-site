@@ -3,7 +3,9 @@
 
 name: "Rafi Rabo"
 # Same wording everywhere (LinkedIn, X, GitHub) helps AIs identify you.
-headline: "Product manager, founder, electrical engineer."
+headline: "Product manager. 6+ years at Microsoft building enterprise AI and sales products, then a startup founder. Looking for a significant product or business role at a fast-growing company."
+# Short role for page titles and link previews.
+role: "Product manager"
 location: "Tel Aviv, Israel"
 
 site:
@@ -12,13 +14,13 @@ site:
 
 # The few short lines on the homepage. [text](url) links are allowed.
 highlights:
-  - "Most recently a founder: Batta (agentic security reviews), then Penny (voice agents for small businesses). Neither worked out."
+  - "Founder: built Batta (agentic security reviews, 5 enterprise design partners), then Penny (voice agents for small businesses, 5 design partners, 2 customers in production). We stopped both, and I learned more than in any job."
   - text: "6+ years as a product manager at [Microsoft](/experience/microsoft/). Some of the work:"
     items:
-      - "[Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-agent-evaluation-intro): led the agent evaluation framework"
-      - "[Copilot for Sales](https://adoption.microsoft.com/en-us/copilot-for-sales/): led the 0→1 launch, thousands of customers"
-      - "[Dynamics 365 Sales](https://www.microsoft.com/en-us/dynamics-365/blog/it-professional/2021/01/29/enable-digital-selling-with-the-sales-accelerator-in-dynamics-365-sales/): the sales accelerator, used by hundreds of enterprises"
-      - "[Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview): led the query experience, 1M+ monthly users"
+      - "[Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-agent-evaluation-intro): led the agent evaluation framework, used by builders to test agents before shipping"
+      - "[Copilot for Sales](https://adoption.microsoft.com/en-us/copilot-for-sales/): led the 0→1 MVP; the product grew to thousands of customers, including Fortune 100"
+      - "[Dynamics 365 Sales](https://www.microsoft.com/en-us/dynamics-365/blog/it-professional/2021/01/29/enable-digital-selling-with-the-sales-accelerator-in-dynamics-365-sales/): shipped the sales accelerator, used by hundreds of enterprises"
+      - "[Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview): led the Log Analytics query experience, used by 1M+ people monthly"
       - "[Surface Pen](https://support.microsoft.com/en-us/surface/accessories/pen/surface-pen-compatibility-and-features): led zero-force inking, shipped across all Surface pens and devices"
   - "5 years as a chip engineer at [Apple](/experience/apple/): silicon in Macs, iPhones and Apple Watches."
   - "Electrical engineering at Tel Aviv University, summa cum laude."
@@ -32,7 +34,8 @@ links:
 education:
   - school: "Tel Aviv University"
     degree: "B.Sc. Electrical & Electronics Engineering"
-    note: "Summa cum laude, Dean's list every year"
+    years: "2012–2016"
+    note: "Summa cum laude, Dean's list every year."
 
 beyond_work:
   volunteering:
@@ -46,6 +49,9 @@ beyond_work:
     - "Hard work. I don't let go, and I do it with a smile."
     - "Humility. I remember where I came from, and I listen to people with care."
     - "Empathy, for customers and their pain, and for the people I work with."
+
+# Home page call to action (mailto link added by the build).
+cta: "Hiring for a significant product or business role?"
 
 availability: "Looking for a significant product or business role at a fast-growing company. I want to move the needle, and move fast."
 
