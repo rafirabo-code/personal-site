@@ -148,7 +148,6 @@ ${profile.links.map((l) => `- [${l.label}](${l.url})`).join("\n")}
 
 const yearsOf = (d) => String(d.years ?? "").split("–");
 const exp = Object.fromEntries(experience.map((d) => [d.slug, d]));
-const founderTeams = (exp.founder?.roles ?? []).map((r) => ({ "@type": "Organization", name: r.team }));
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -159,10 +158,11 @@ const jsonLd = {
   email: `mailto:${profile.contact.email}`,
   address: { "@type": "PostalAddress", addressLocality: "Tel Aviv", addressCountry: "IL" },
   alumniOf: education.map((e) => ({ "@type": "CollegeOrUniversity", name: e.school })),
-  hasOccupation: [
-    { "@type": "Role", roleName: "Founder", startDate: yearsOf(exp.founder)[0], worksFor: founderTeams },
-    { "@type": "Role", roleName: exp.microsoft.roles[0].title, startDate: yearsOf(exp.microsoft)[0], endDate: yearsOf(exp.microsoft)[1], worksFor: { "@type": "Organization", name: "Microsoft" } },
-    { "@type": "Role", roleName: exp.apple.roles[0].title, startDate: yearsOf(exp.apple)[0], endDate: yearsOf(exp.apple)[1], worksFor: { "@type": "Organization", name: "Apple" } },
+  // Role pattern (schema.org/Role): Person.worksFor holds an OrganizationRole whose own worksFor is the organization.
+  worksFor: [
+    ...(exp.founder?.roles ?? []).map((r) => ({ "@type": "OrganizationRole", roleName: "Founder", startDate: yearsOf(exp.founder)[0], worksFor: { "@type": "Organization", name: r.team } })),
+    { "@type": "OrganizationRole", roleName: exp.microsoft.roles[0].title, startDate: yearsOf(exp.microsoft)[0], endDate: yearsOf(exp.microsoft)[1], worksFor: { "@type": "Organization", name: "Microsoft" } },
+    { "@type": "OrganizationRole", roleName: exp.apple.roles[0].title, startDate: yearsOf(exp.apple)[0], endDate: yearsOf(exp.apple)[1], worksFor: { "@type": "Organization", name: "Apple" } },
   ],
   knowsAbout: ["Product management", "AI agents", "Agent evaluation", "B2B SaaS", "0→1 products", "Sales technology", "Voice AI", "Go-to-market"],
   sameAs: profile.links.map((l) => l.url),
