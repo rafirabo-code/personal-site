@@ -192,7 +192,7 @@ function buildServer() {
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Accept, Mcp-Session-Id, Mcp-Protocol-Version, Last-Event-ID",
   "Access-Control-Expose-Headers": "Mcp-Session-Id, Mcp-Protocol-Version",
   "Access-Control-Max-Age": "86400",
@@ -204,6 +204,39 @@ function withHeaders(res: Response, extra: Record<string, string>) {
   out.headers.set("X-Content-Type-Options", "nosniff");
   out.headers.set("Cache-Control", "no-store");
   return out;
+}
+
+function rpcError(status: number, code: number, message: string) {
+  return withHeaders(
+    new Response(JSON.stringify({ jsonrpc: "2.0", error: { code, message }, id: null }), {
+      status,
+      headers: { "Content-Type": "application/json" },
+    }),
+    CORS,
+  );
+}
+
+// Reads the body as text, stopping as soon as it passes `max` bytes (also covers chunked bodies with no Content-Length).
+async function readCapped(req: Request, max: number): Promise<string | null> {
+  if (Number(req.headers.get("Content-Length") ?? 0) > max) return null;
+  if (!req.body) return "";
+  const reader = req.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    size += value.byteLength;
+    if (size > max) {
+      await reader.cancel();
+      return null;
+    }
+    chunks.push(value);
+  }
+  const all = new Uint8Array(size);
+  let off = 0;
+  for (const c of chunks) (all.set(c, off), (off += c.byteLength));
+  return new TextDecoder().decode(all);
 }
 
 async function handleMcp(req: Request, env: Env): Promise<Response> {
@@ -226,6 +259,19 @@ async function handleMcp(req: Request, env: Env): Promise<Response> {
     const { success } = await env.RATE_LIMITER.limit({ key: ip });
     if (!success) return withHeaders(new Response("Too many requests", { status: 429, headers: { "Retry-After": "60" } }), CORS);
   }
+
+  // Read the body ourselves (capped) so we can refuse JSON-RPC batches: one request = one call.
+  // Batching was dropped from the MCP spec, and it let a single rate-limited request fetch the CV 100 times.
+  const body = await readCapped(req, MAX_BODY);
+  if (body === null) return rpcError(413, -32600, `Request body too large (max ${MAX_BODY} bytes).`);
+  let msg: unknown;
+  try {
+    msg = JSON.parse(body);
+  } catch {
+    msg = undefined; // let the SDK return its standard parse error
+  }
+  if (Array.isArray(msg) && msg.length > 1) return rpcError(400, -32600, "Batch requests are not supported. Send one JSON-RPC message per request.");
+  req = new Request(req.url, { method: req.method, headers: req.headers, body });
 
   const server = buildServer();
   const transport = new WebStandardStreamableHTTPServerTransport({
