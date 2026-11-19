@@ -8,14 +8,16 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "html_handling": "auto-trailing-slash",
-    // Only /mcp runs the Worker; every other path is served straight from static assets.
-    "run_worker_first": ["/mcp", "/mcp/"]
+    // Only /mcp and /ask/* run the Worker; every other path is served straight from static assets.
+    "run_worker_first": ["/mcp", "/mcp/", "/ask/*"]
   },
   // 60 MCP requests per minute per IP.
   "ratelimits": [
     { "name": "RATE_LIMITER", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } }
   ],
   // Serve the site on the custom domain (Cloudflare creates the DNS record and certificate).
+  // Ask-an-AI click counts, one key per AI per month (e.g. "claude:2026-11"). View: npm run clicks
+  "kv_namespaces": [{ "binding": "ASK_CLICKS", "id": "b5590ba07216408590a9d2d55475fbde" }],
   "routes": [{ "pattern": "rafirabo.com", "custom_domain": true }],
   "observability": { "enabled": true }
 }

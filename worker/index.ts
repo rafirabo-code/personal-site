@@ -10,16 +10,18 @@ import content from "./generated/content.json";
 interface Env {
   ASSETS: Fetcher;
   RATE_LIMITER?: { limit(opts: { key: string }): Promise<{ success: boolean }> };
+  ASK_CLICKS?: KVNamespace;
 }
 
 // Markdown is prebuilt by scripts/build.mjs so the site and the MCP server say exactly the same thing.
 type Doc = { slug: string; md: string; summary?: string; tags?: string[]; [k: string]: any };
-const { profile, about, experience, projects, cvMd } = content as unknown as {
+const { profile, about, experience, projects, cvMd, ask } = content as unknown as {
   profile: Record<string, any>;
   about: { body: string };
   experience: Doc[];
   projects: Doc[];
   cvMd: string;
+  ask: Record<string, string>;
 };
 
 const site = String(profile.site.url).replace(/\/$/, "");
@@ -288,10 +290,34 @@ async function handleMcp(req: Request, env: Env): Promise<Response> {
   }
 }
 
+// /ask/<ai>: counts the click (one KV key per AI per month), then redirects to that AI with the prompt.
+// No personal data is stored: just a number. Bots and over-limit IPs are redirected without counting.
+async function handleAsk(req: Request, env: Env, ctx: ExecutionContext, ai: string): Promise<Response> {
+  const target = Object.hasOwn(ask, ai) ? ask[ai] : undefined;
+  if (!target) return Response.redirect(`${site}/`, 302);
+  const bot = /bot|crawl|spider|preview|fetch|curl|wget|python|headless/i.test(req.headers.get("User-Agent") ?? "");
+  if (env.ASK_CLICKS && !bot && req.method === "GET") {
+    const allowed = env.RATE_LIMITER
+      ? (await env.RATE_LIMITER.limit({ key: `ask:${req.headers.get("CF-Connecting-IP") ?? "unknown"}` })).success
+      : true;
+    if (allowed) {
+      const key = `${ai}:${new Date().toISOString().slice(0, 7)}`;
+      ctx.waitUntil(
+        env.ASK_CLICKS.get(key)
+          .then((v) => env.ASK_CLICKS!.put(key, String((Number(v) || 0) + 1)))
+          .catch(() => {}), // counting must never break the redirect (e.g. daily KV write limit)
+      );
+    }
+  }
+  return new Response(null, { status: 302, headers: { Location: target, "Cache-Control": "no-store", "Referrer-Policy": "no-referrer" } });
+}
+
 export default {
-  async fetch(req: Request, env: Env): Promise<Response> {
+  async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(req.url);
     if (url.pathname === "/mcp" || url.pathname === "/mcp/") return handleMcp(req, env);
+    const m = url.pathname.match(/^\/ask\/([a-z]+)\/?$/);
+    if (m) return handleAsk(req, env, ctx, m[1]);
     return env.ASSETS.fetch(req);
   },
 } satisfies ExportedHandler<Env>;

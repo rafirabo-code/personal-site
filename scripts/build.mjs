@@ -177,6 +177,7 @@ ${md ? `<link rel="alternate" type="text/markdown" href="${site}${md}">` : ""}
 <link rel="stylesheet" href="/style.css">
 <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, "\\u003c")}</script>
 <script src="/webmcp.js" defer></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "05da137d1dd44ff988e47f27252c4c5e"}'></script>
 </head>
 <body>
 <main>
@@ -213,7 +214,7 @@ const home = page({
 ${profile.highlights.map(hlHtml).join("\n")}
 <li><a href="/cv/">Full CV</a> · ${profile.links.map((l) => `<a href="${esc(l.url)}" rel="me">${esc(l.label)}</a>`).join(" · ")}</li>
 ${profile.contact.email ? `<li><a href="mailto:${esc(profile.contact.email)}">${esc(profile.contact.email)}</a></li>` : ""}
-<li class="gap">Ask an AI about me: ${askLinks.map(([n, f]) => `<a href="${f(q)}" target="_blank" rel="noopener">${n}</a>`).join(" · ")}</li>
+<li class="gap">Ask an AI about me: ${askLinks.map(([n]) => `<a href="/ask/${n.toLowerCase()}" target="_blank" rel="noopener nofollow">${n}</a>`).join(" · ")}</li>
 </ul>
 <footer>For agents: <a href="/llms.txt">llms.txt</a> · <a href="/cv.md">cv.md</a> · MCP <code>${esc(site)}/mcp</code></footer>`,
 });
@@ -306,7 +307,7 @@ ${d.url ? `<p class="meta"><a href="${esc(d.url)}">${esc(d.url)}</a></p>` : ""}$
   urls.push(`/projects/${d.slug}/`);
 }
 
-write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /mcp\n\nSitemap: ${site}/sitemap.xml\n`);
+write("robots.txt", `User-agent: *\nAllow: /\nDisallow: /mcp\nDisallow: /ask/\n\nSitemap: ${site}/sitemap.xml\n`);
 write(
   "sitemap.xml",
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls
@@ -323,6 +324,8 @@ const content = {
   experience: experience.map(({ body, ...d }) => ({ ...d, md: mdBySlug.experience[d.slug] })),
   projects: projects.map(({ body, ...d }) => ({ ...d, md: mdBySlug.projects[d.slug] })),
   cvMd,
+  // /ask/<ai> redirect targets (the Worker counts the click, then redirects here).
+  ask: Object.fromEntries(askLinks.map(([n, f]) => [n.toLowerCase(), f(encodeURIComponent(askPrompt))])),
 };
 mkdirSync(join(root, "worker", "generated"), { recursive: true });
 writeFileSync(join(root, "worker", "generated", "content.json"), JSON.stringify(content, null, 2));
