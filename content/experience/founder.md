@@ -3,7 +3,7 @@ company: Founder — Batta, then Penny
 duration: 8 months
 years: "2026"
 order: 1
-summary: Founded Batta (agentic security reviews for CISOs, 5 enterprise design partners), then Penny (voice agents for small businesses, 5 design partners, 2 customers in production). We stopped both.
+summary: "8 months as a startup founder. Built and stopped two ventures: Batta (agentic security reviews for CISOs, 5 enterprise design partners) and Penny (voice agents for small businesses, 5 design partners, 2 customers in production). I learned more than in any job."
 tags: [founder, startup, 0-to-1, voice-agents, cybersecurity, ai-agents, go-to-market]
 roles:
   - title: Founder
@@ -37,4 +37,5 @@ build the agentic architecture behind it. Penny gave small businesses voice agen
 scale and close more deals without adding headcount. We had 5 design partners and 2 customers using
 it in production.
 
-**The end.** Before committing to one big client, we walked away from the deal and stopped.
+**The end.** Before committing to one big client, we walked away from the deal. We stopped both. I learned
+more than in any job.

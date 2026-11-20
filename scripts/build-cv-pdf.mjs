@@ -77,7 +77,7 @@ ${row(`<b>${t(edu.school)}</b> — ${t(edu.degree)}<br>${t(edu.note)}`, edu.year
 ${row(`<b>IDF special forces</b> — ${t(mil.roles[0].title.toLowerCase())}; ${t(roleText(mil.roles[0]))}`, mil.years)}
 
 <h2>Also</h2>
-<p>Volunteering: ${t(vol[0])}, surf mentoring for youth at risk; ${t(vol[1])}, a pre-military preparatory group for teens. Surfer since childhood.</p>
+<p>Volunteering: surf mentor for youth at risk at ${t(vol[0])}; ${t(vol[1])}, a pre-military preparatory group for teens. Surfing since childhood.</p>
 </body></html>`;
 
 const tmp = mkdtempSync(join(tmpdir(), "cvpdf-"));

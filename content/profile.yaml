@@ -3,7 +3,7 @@
 
 name: "Rafi Rabo"
 # Same wording everywhere (LinkedIn, X, GitHub) helps AIs identify you.
-headline: "Product manager. 6+ years at Microsoft building enterprise AI and sales products, then a startup founder. Looking for a founding PM or strategy role at a fast-growing company."
+headline: "Product manager. 6+ years at Microsoft building enterprise AI and sales products, then 8 months as a startup founder. Looking for a founding PM or strategy role at a fast-growing company."
 # Short role for page titles and link previews.
 role: "Product manager"
 location: "Tel Aviv, Israel"
@@ -34,19 +34,20 @@ home_highlights:
 
 # Highlights for llms.txt, cv.md and the MCP server. [text](url) links are allowed.
 highlights:
-  - "Founder: built Batta (agentic security reviews, 5 enterprise design partners), then Penny (voice agents for small businesses, 5 design partners, 2 customers in production). We stopped both, and I learned more than in any job."
+  - "8 months as a startup founder: built and stopped two ventures, [Batta and Penny](/experience/founder/). Batta: agentic security reviews, 5 enterprise design partners. Penny: voice agents for small businesses, 5 design partners, 2 customers in production. I learned more than in any job."
   - text: "6+ years as a product manager at [Microsoft](/experience/microsoft/). Some of the work:"
     items:
-      - "[Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-agent-evaluation-intro): led the agent evaluation framework, used by builders to test agents before shipping"
-      - "[Copilot for Sales](https://adoption.microsoft.com/en-us/copilot-for-sales/): led the 0→1 MVP; the product grew to thousands of customers, including Fortune 100"
-      - "[Dynamics 365 Sales](https://www.microsoft.com/en-us/dynamics-365/blog/it-professional/2021/01/29/enable-digital-selling-with-the-sales-accelerator-in-dynamics-365-sales/): shipped the sales accelerator, used by hundreds of enterprises"
-      - "[Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview): led the Log Analytics query experience, used by 1M+ people monthly"
-      - "[Surface Pen](https://support.microsoft.com/en-us/surface/accessories/pen/surface-pen-compatibility-and-features): led zero-force inking, shipped across all Surface pens and devices"
-  - "5 years as a chip engineer at [Apple](/experience/apple/): silicon in Macs, iPhones and Apple Watches."
-  - "Electrical engineering at Tel Aviv University, summa cum laude."
+      - "[Copilot Studio](https://learn.microsoft.com/en-us/microsoft-copilot-studio/analytics-agent-evaluation-intro): established the agent evaluation framework, used by builders to test agents before shipping"
+      - "[Copilot for Sales](https://adoption.microsoft.com/en-us/copilot-for-sales/): led 0→1, grew to thousands of customers, including Fortune 100"
+      - "[Dynamics 365 Sales](https://www.microsoft.com/en-us/dynamics-365/blog/it-professional/2021/01/29/enable-digital-selling-with-the-sales-accelerator-in-dynamics-365-sales/): led digital selling: conversational intelligence and sales accelerator, used by hundreds of enterprises"
+      - "[Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview): led the Log Analytics query experience, 1M+ monthly users"
+      - "[Surface Pen](https://support.microsoft.com/en-us/surface/accessories/pen/surface-pen-compatibility-and-features): zero-force inking, shipped across all Surface pens and devices"
+  - "5 years as a chip design engineer at [Apple](/experience/apple/): silicon in Macs, iPhones and Apple Watch."
+  - "Electrical engineering, Tel Aviv University, summa cum laude."
   - "IDF special forces unit."
   - "What I [value](/cv/#values): hard work, humility, empathy."
-  - "Surfer since childhood, and surf mentor for youth at risk. I cook, bake, read and write."
+  - "Outside of work: surfing since childhood, cooking, baking, reading and writing."
+  - "Volunteer: surf mentor for youth at risk at Hagal Sheli."
 
 links:
   - { label: "LinkedIn", url: "https://www.linkedin.com/in/rafi-rabo" }
@@ -59,10 +60,10 @@ education:
 
 beyond_work:
   volunteering:
-    - "Hagal Sheli (My Wave): guiding youth at risk through a surfing-based empowerment program. Led the organization's first groups from the Arab sector. [Video](https://www.facebook.com/share/v/19h6p8GaCT/)"
+    - "Hagal Sheli (My Wave): surf mentor for youth at risk in a surfing-based empowerment program. Led the organization's first groups from the Arab sector. [Video](https://www.facebook.com/share/v/19h6p8GaCT/)"
     - "Aharai: led a pre-military preparatory group for teens in Bat Yam."
   hobbies:
-    - "Surfing since I was a kid. I've surfed Costa Rica, Nicaragua, Mexico, Sri Lanka, the Maldives, Portugal, Morocco, Tenerife and California. Surfing is life; all the rest is just details."
+    - "Surfing since childhood. I've surfed Costa Rica, Nicaragua, Mexico, Sri Lanka, the Maldives, Portugal, Morocco, Tenerife and California. Surfing is life; all the rest is just details."
     - "Cooking traditional food, mostly from Arab cuisine but not only. My specialty is baking ma'amoul."
     - "Reading and writing."
   values:

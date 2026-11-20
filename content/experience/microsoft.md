@@ -3,28 +3,28 @@ company: Microsoft
 duration: 6+ years
 years: "2019–2026"
 order: 2
-summary: Product manager for AI agents in Copilot Studio, the 0→1 launch of Copilot for Sales, Dynamics 365, Azure and Surface.
+summary: "Product manager: established the agent evaluation framework in Copilot Studio, led 0→1 on Copilot for Sales, led digital selling in Dynamics 365 Sales, plus Azure Monitor and Surface Pen."
 tags: [ai-agents, copilot, enterprise, governance, evaluation, 0-to-1, sales, product]
 roles:
   - title: Senior Product Manager
     team: Copilot Studio
-    line: Led the agent evaluation framework.
+    line: Established the agent evaluation framework.
     # pdf_line: the one-line version for the one-page PDF CV.
-    pdf_line: "led the agent evaluation framework; shipped connector data controls for thousands of agent builders."
+    pdf_line: "established the agent evaluation framework; shipped connector data controls for thousands of agent builders."
     points:
       - "Builders test their agents and ship with confidence."
       - "Shipped data controls over connectors across Power Platform, for thousands of agent builders."
   - title: Senior Product Manager
     team: Copilot for Sales
-    line: Led the 0→1 MVP, launched inside Teams as Viva Sales.
-    pdf_line: "led the 0→1 MVP (Viva Sales); thousands of customers, incl. Fortune 100."
+    line: Led 0→1. The MVP launched inside Teams as Viva Sales.
+    pdf_line: "led 0→1 (launched as Viva Sales); grew to thousands of customers, incl. Fortune 100."
     points:
-      - "The product went on to reach thousands of customers, including Fortune 100."
+      - "Grew to thousands of customers, including Fortune 100."
       - "Adopting customers reported seller productivity and revenue gains."
   - title: Product Manager
     team: Dynamics 365 Sales
-    line: Shipped the sales accelerator.
-    pdf_line: "shipped the sales accelerator, used by hundreds of global enterprises."
+    line: "Led digital selling: conversational intelligence and sales accelerator."
+    pdf_line: "led digital selling: conversational intelligence and sales accelerator; hundreds of global enterprises."
     points:
       - "Used by hundreds of global enterprises."
       - "Sales orgs define, control and monitor their own workflows."
