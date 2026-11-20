@@ -16,7 +16,7 @@ const html = `<!doctype html><meta charset="utf-8"><style>
 </style>
 <h1>Rafi Rabo</h1>
 <p>Product manager · Ex-Microsoft · Startup founder</p>
-<p>Product or business role, fast-growing company</p>
+<p>Founding PM or strategy, fast-growing company</p>
 <div class="site">rafirabo.com</div>`;
 const tmp = mkdtempSync(join(tmpdir(), "og-"));
 try {

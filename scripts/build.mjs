@@ -239,18 +239,17 @@ const q = encodeURIComponent(askPrompt);
 const home = page({
   title,
   description: profile.headline,
-  twitter: "Ex-Microsoft PM (Copilot for Sales 0→1, Copilot Studio agent evaluation), startup founder. Looking for a significant product or business role at a fast-growing company.",
+  twitter: "Ex-Microsoft PM (Copilot for Sales 0→1, Copilot Studio agent evaluation), startup founder. Looking for a founding PM or strategy role at a fast-growing company.",
   path: "/",
   md: "/cv.md",
   body: `<h1>${esc(profile.name)}</h1>
 <ul>
-<li>${esc(profile.headline)}</li>
-${profile.highlights.map(hlHtml).join("\n")}
+<li>${esc(profile.home_pitch ?? profile.headline)}</li>
+${(profile.home_highlights ?? profile.highlights).map(hlHtml).join("\n")}
 <li>${ctaText(`<a href="mailto:${esc(profile.contact.email)}">${esc(profile.contact.email)}</a>`)}</li>
 <li><a href="/cv/">Full CV</a> · <a href="${pdfPath}">PDF</a> · ${profile.links.map((l) => `<a href="${esc(l.url)}" rel="me">${esc(l.label)}</a>`).join(" · ")}</li>
-<li class="gap">Ask an AI about me: ${askLinks.map(([n]) => `<a href="/ask/${n.toLowerCase()}" target="_blank" rel="noopener nofollow">${n}</a>`).join(" · ")}</li>
 </ul>
-<footer>For agents: <a href="/llms.txt">llms.txt</a> · <a href="/cv.md">cv.md</a> · <a href="/mcp-info/">MCP server</a></footer>`,
+<footer>Ask an AI about me: ${askLinks.map(([n]) => `<a href="/ask/${n.toLowerCase()}" target="_blank" rel="noopener nofollow">${n}</a>`).join(" · ")} · Agents: <a href="/llms.txt">llms.txt</a> · <a href="/cv.md">cv.md</a> · <a href="/mcp-info/">MCP</a></footer>`,
 });
 
 const cvHtml = page({
@@ -424,7 +423,8 @@ for (const f of readdirSync(join(root, "public"), { withFileTypes: true })) if (
 
 // Data for the MCP server: structured fields plus the same Markdown the site serves.
 const content = {
-  profile: { ...profile, highlights: profile.highlights.map(hlMd) },
+  // home_pitch and home_highlights are homepage-only; keep them out of the MCP data.
+  profile: { ...Object.fromEntries(Object.entries(profile).filter(([k]) => !k.startsWith("home_"))), highlights: profile.highlights.map(hlMd) },
   about: { ...about, body: abs(about.body) },
   experience: experience.map(({ body, ...d }) => ({ ...d, md: mdBySlug.experience[d.slug] })),
   projects: projects.map(({ body, ...d }) => ({ ...d, md: mdBySlug.projects[d.slug] })),
