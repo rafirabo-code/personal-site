@@ -65,7 +65,7 @@ const roleName = (r) => [r.title, r.team].filter(Boolean).join(", ");
 // Years (e.g. "2019–2026") are shown where present; duration ("6+ years") is the fallback.
 const when = (d) => d.years ?? d.duration ?? "";
 const pdfPath = "/rafi-rabo-cv.pdf";
-const title = `${profile.name} — ${profile.role}`;
+const title = profile.name;
 // Call to action, shared by the home page and llms.txt so they never drift.
 const ctaText = (email) => `${profile.cta} Email me at ${email}.`;
 
